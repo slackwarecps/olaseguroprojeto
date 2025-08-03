@@ -82,6 +82,20 @@ keytool -importkeystore \
 ```
 
 
+## IMPORTAR CERTIFICADO NO POSTMAN
+
+$ keytool -exportcert -alias certificado-app123 -keystore src/main/resources/keystore-cofre-area53.p12 -storetype PKCS12 -file src/main/resources/fabao-local-server.crt
+
+# Se o seu arquivo server.crt é binário, converta-o para PEM
+$ openssl x509 -in src/main/resources/certificado-app123.crt -inform DER -out src/main/resources/certificado-app123.pem -outform PEM
+
+# Primeiro, converta o keystore PKCS12 para um arquivo de certificado PEM (se necessário)
+$ openssl pkcs12 -in src/main/resources/keystore-cofre-area53.p12 -nokeys -out src/main/resources/fabao-local-server.pem
+
+
+
+
+
 
 ## Topicos
 
@@ -89,6 +103,10 @@ keytool -importkeystore \
 2 as chaves
 3 os certificados
 4 O padrao p12
-4 postman e SSL Auto Assinado
-4 postman configurando a chave
-6 Certificados CA Validos
+5 postman e SSL Auto Assinado
+6 postman configurando a chave
+7 Exportando 
+8 Certificados CA Validos
+9 A seção de Client certificates da imagem serve para uma autenticação diferente: a autenticação mútua (mTLS). Nesse cenário, tanto o cliente (Postman) quanto o servidor (sua aplicação) se autenticam com certificados. Ou seja, o servidor só aceitaria a requisição se o Postman apresentasse um certificado de cliente que ele confiasse.
+
+Como o seu objetivo é apenas fazer com que o Postman confie no seu servidor para que você possa testar sua API, a configuração correta é na seção CA certificates.
