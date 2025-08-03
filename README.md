@@ -63,3 +63,32 @@ sequenceDiagram
 
 
 ![ Sequencia](docs/images/diagrama1.jpg)
+
+
+---
+
+## Cofre no Padrao P12
+
+ o formato JKS (Java KeyStore), que é um formato proprietário da Oracle, está sendo substituído pelo formato PKCS12. O PKCS12 é um padrão da indústria, o que significa que é mais amplamente utilizado e suportado por diferentes linguagens de programação e ferramentas, não apenas pelo ecossistema Java.
+
+A recomendação é clara: migrar seu keystore JKS para o formato PKCS12.
+
+```
+
+keytool -importkeystore \
+        -srckeystore src/main/resources/keystore-cofre-area53.jks \
+        -destkeystore src/main/resources/keystore-cofre-area53.p12 \
+        -deststoretype pkcs12
+```
+
+
+
+## Topicos
+
+1 o que sao os cofres
+2 as chaves
+3 os certificados
+4 O padrao p12
+4 postman e SSL Auto Assinado
+4 postman configurando a chave
+6 Certificados CA Validos

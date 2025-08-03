@@ -1,14 +1,18 @@
 package br.com.fabioalvaro.olaseguroprojeto.controllers;
-import org.springframework.stereotype.Controller;
+
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
-@Controller
+@RestController
 public class OlaMundoController {
 
     @GetMapping("/olamundo")
     public String olaMundo() {
-        return "olamamae";
+        return "<h1>Ola mamãe!</h1> A data e hora de agora é: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
     }
 
 }
