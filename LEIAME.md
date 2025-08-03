@@ -52,3 +52,14 @@ Como testar
 
 $ open https://localhost:8443/olamundo
 
+
+## DESENHO DE SOLUCAO
+
+```mermaid
+sequenceDiagram
+    postman->>+backend ssl: busca pagina na porta 8443
+    backend ssl->>+postman: retorna pagina html
+```
+
+
+![ Sequencia](docs/images/diagrama1.jpg)
