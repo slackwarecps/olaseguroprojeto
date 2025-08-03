@@ -93,9 +93,23 @@ $ openssl x509 -in src/main/resources/certificado-app123.crt -inform DER -out sr
 $ openssl pkcs12 -in src/main/resources/keystore-cofre-area53.p12 -nokeys -out src/main/resources/fabao-local-server.pem
 
 
+## MTLS
+Senha: ovofrito123
 
+$ keytool -genkeypair -alias certificado-cliente -keyalg RSA -storetype PKCS12 -keystore keystore-client.p12 -validity 365 -dname "CN=cliente, OU=Dev, O=Porto Bank, L=São Paulo, ST=SP, C=BR"
 
+$ keytool -exportcert -alias certificado-cliente -file client.cer -keystore keystore-client.p12 -storepass ovofrito123
+$ keytool -exportcert -alias certificado-cliente -file client.cer -keystore keystore-client.p12 -storepass <senha-do-cliente>
 
+2 Importe o certificado do cliente bob
+
+$ keytool -importcert -alias certificado-cliente -file client.cer -keystore src/main/resources/keystore-cofre-area53.p12 -storepass batatafrita123
+# Se seu keystore do servidor é o truststore
+$ keytool -importcert -alias certificado-cliente -file client.cer -keystore src/main/resources/keystore-cofre-area53.p12 -storepass batatafrita123 -noprompt
+
+$ keytool -importcert -alias cliente-confiavel-01 -file client.cer -keystore src/main/resources/keystore-cofre-area53.p12 -storepass batatafrita123
+
+$ keytool -list -v -keystore src/main/resources/keystore-cofre-area53.p12 -storepass batatafrita123
 
 ## Topicos
 
@@ -110,3 +124,17 @@ $ openssl pkcs12 -in src/main/resources/keystore-cofre-area53.p12 -nokeys -out s
 9 A seção de Client certificates da imagem serve para uma autenticação diferente: a autenticação mútua (mTLS). Nesse cenário, tanto o cliente (Postman) quanto o servidor (sua aplicação) se autenticam com certificados. Ou seja, o servidor só aceitaria a requisição se o Postman apresentasse um certificado de cliente que ele confiasse.
 
 Como o seu objetivo é apenas fazer com que o Postman confie no seu servidor para que você possa testar sua API, a configuração correta é na seção CA certificates.
+
+## Exportando o certificado publico do servidor
+keytool -exportcert -alias certificado-app123 -file server.cer -keystore keystore-server.p12 -storepass batatafrita123
+keytool -exportcert -alias certificado-cliente -file client.cer -keystore client-bob.p12 -storepass ovofrito123
+keytool -exportcert -alias certificado-app123 -file server.cer -keystore keystore-cofre-area53.p12 -storepass batatafrita123
+
+## SUBINDO DIRETO PARA A JVM
+java -Djavax.net.ssl.trustStore=/Users/fabioalvaropereira/workspaces/tcc/olamundo/src/main/resources/keystore-cofre-area53.p12 \
+     -Djavax.net.ssl.trustStorePassword=batatafrita123 \
+     -Djavax.net.ssl.keyStore=/Users/fabioalvaropereira/workspaces/tcc/olamundo/src/main/resources/keystore-cofre-area53.p12 \
+     -Djavax.net.ssl.keyStorePassword=batatafrita123 \
+     -jar target/olaseguroprojeto-0.0.1-SNAPSHOT.jar
+
+     
