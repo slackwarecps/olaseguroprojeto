@@ -34,6 +34,21 @@ Em resumo, o keystore é o repositório seguro para chaves e certificados que su
 ---
 Senha: batatafrita123
 
-keytool -genkeypair -alias springboot -keyalg RSA -keysize 2048 -storetype JKS -keystore src/main/resources/keystore.jks -validity 3650
+```
+$ keytool -genkeypair -alias certificado-app123 /
+ -keyalg RSA -keysize 2048 /
+  -storetype JKS -keystore src/main/resources/keystore-cofre-area53.jks -validity 3650
+```
 
-keytool -genkeypair -alias certificado-app123 -keyalg RSA -keysize 2048 -storetype JKS -keystore src/main/resources/keystore-cofre-area53.jks -validity 3650
+Como executar
+```
+
+$ mvn clean package
+$ mvn clean spring-boot:run  
+```
+
+
+Como testar
+
+$ open https://localhost:8443/olamundo
+

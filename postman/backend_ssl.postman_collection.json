@@ -1,0 +1,57 @@
+{
+	"info": {
+		"_postman_id": "01b139ff-0141-4e57-b604-8ae93b9e137b",
+		"name": "backend_ssl",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23741639",
+		"_collection_link": "https://www.postman.com/martian-resonance-528707/workspace/tcc-usp/collection/23741639-01b139ff-0141-4e57-b604-8ae93b9e137b?action=share&source=collection_link&creator=23741639"
+	},
+	"item": [
+		{
+			"name": "testa ssl 1",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "testa ssl com SSL",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:8443/olamundo",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "8443",
+					"path": [
+						"olamundo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "testa 1 sem SSL",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8443/olamundo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8443",
+					"path": [
+						"olamundo"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
