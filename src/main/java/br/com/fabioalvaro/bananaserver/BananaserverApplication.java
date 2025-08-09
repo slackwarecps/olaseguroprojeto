@@ -1,13 +1,13 @@
-package br.com.fabioalvaro.olaseguroprojeto;
+package br.com.fabioalvaro.bananaserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class OlaseguroprojetoApplication {
+public class BananaserverApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OlaseguroprojetoApplication.class, args);
+		SpringApplication.run(BananaserverApplication.class, args);
 	}
 
 }

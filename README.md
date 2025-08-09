@@ -1,4 +1,18 @@
-# Getting Started
+# POC DE MTLS
+
+
+1 servidor chamado banana-server
+
+senha bananafrita123
+criar PKCS12 do 
+ localhost para meu banana server
+
+
+ 2 cliente1 ovo
+3 cliente2 queijo.
+
+
+
 
 ## Certificado Auto Assinado
 
@@ -96,10 +110,10 @@ $ openssl pkcs12 -in src/main/resources/keystore-cofre-area53.p12 -nokeys -out s
 ## MTLS
 Senha: ovofrito123
 
-$ keytool -genkeypair -alias certificado-cliente -keyalg RSA -storetype PKCS12 -keystore keystore-client.p12 -validity 365 -dname "CN=cliente, OU=Dev, O=Porto Bank, L=São Paulo, ST=SP, C=BR"
+$ keytool -genkeypair -alias certificado-cliente-ovo -keyalg RSA -storetype PKCS12 -keystore cofre-client.p12 -validity 365 -dname "CN=cliente-ovo, OU=Fabio, O=Fabio, L=Campinas, ST=SP, C=BR"
 
-$ keytool -exportcert -alias certificado-cliente -file client.cer -keystore keystore-client.p12 -storepass ovofrito123
-$ keytool -exportcert -alias certificado-cliente -file client.cer -keystore keystore-client.p12 -storepass <senha-do-cliente>
+$ keytool -exportcert -alias certificado-cliente-ovo -file client.cer -keystore cofre-client.p12 -storepass ovofrito123
+$ keytool -exportcert -alias certificado-cliente-ovo -file client.cer -keystore cofre-client.p12 -storepass <senha-do-cliente>
 
 2 Importe o certificado do cliente bob
 
@@ -137,4 +151,55 @@ java -Djavax.net.ssl.trustStore=/Users/fabioalvaropereira/workspaces/tcc/olamund
      -Djavax.net.ssl.keyStorePassword=batatafrita123 \
      -jar target/olaseguroprojeto-0.0.1-SNAPSHOT.jar
 
-     
+
+
+## LETS 
+
+keytool -genkeypair -alias server_key -keyalg RSA -keysize 2048 -keystore keystore-cofre-area53.p12 -storepass batatafrita123 -dname "CN=localhost, OU=Dev, O=Porto Bank, L=São Paulo, ST=SP, C=BR" -keypass batatafrita123
+keytool -certreq -alias server_key -keystore keystore-cofre-area53.p12 -storepass batatafrita123 -file server.csr
+
+keytool -importcert -alias client_ca -file client.cer -keystore keystore-cofre-area53.p12 -storepass batatafrita123 -noprompt
+
+
+Passo 3 : Assinar usando o CA: 
+---
+
+
+## SERVIDOR
+## Criando o pedido de Assinatura CSR
+openssl req -new -key banana-server.key -out banana-server.csr -subj "/C=BR/ST=SP/L=Sao Paulo/O=BananaServer/OU=Tech/CN=localhost"
+
+## assinando com CA
+openssl x509 -req -in banana-server.csr -CA ca1.crt -CAkey ca1.key -CAserial ca1.srl -out banana-server.crt -days 365
+
+Passo 4: gerar P12
+---
+openssl pkcs12 -export -out banana-server.p12 -inkey banana-server.key -in banana-server.crt -certfile ca.crt -name banana-server -password pass:bananafrita123
+
+Passo 5 : criar cofre java do servidor Feign Client
+---
+openssl pkcs12 -export -out banana-cofre.p12 -inkey banana-server.key -in banana-server.crt -certfile ca1.crt -name banana-server -password pass:bananafrita123
+
+### Truste store
+keytool -importcert -alias ca -file ca1.crt -keystore banana-server-truststore.p12 -storetype PKCS12 -storepass senha123 -noprompt
+
+
+
+
+
+## CLIENTE ! OVO
+### passos chave, certificado e cofre
+openssl req -new -newkey rsa:2048 -nodes -keyout client1-ovo.key -out client1-ovo.csr -subj "/C=BR/ST=SP/L=Sao Paulo/O=Client1Ovo/OU=Clients/CN=client1-ovo"
+openssl x509 -req -in client1-ovo.csr -CA ca1.crt -CAkey ca1.key -CAserial ca1.srl -out client1-ovo.crt -days 365
+openssl pkcs12 -export -out client1-ovo-cofre.p12 -inkey client1-ovo.key -in client1-ovo.crt -certfile ca1.crt -name client1-ovo -password pass:ovofrito123
+### Truste store
+keytool -importcert -alias ca -file ca1.crt -keystore client1-ovo-truststore.p12 -storetype PKCS12 -storepass senha123 -noprompt
+
+
+## CLIENTE 2 QUEIJO
+### passos chave, certificado e cofre
+openssl req -new -newkey rsa:2048 -nodes -keyout client2-queijo.key -out client2-queijo.csr -subj "/C=BR/ST=SP/L=Sao Paulo/O=Client2Queijo/OU=Clients/CN=client2-queijo"
+openssl x509 -req -in client2-queijo.csr -CA ca1.crt -CAkey ca1.key -CAserial ca1.srl -out client2-queijo.crt -days 365
+openssl pkcs12 -export -out client2-queijo-cofre.p12 -inkey client2-queijo.key -in client2-queijo.crt -certfile ca1.crt -name client2-queijo -password pass:queijo123
+### Truste store
+keytool -importcert -alias ca -file ca1.crt -keystore client2-queijo-truststore.p12 -storetype PKCS12 -storepass senha123 -noprompt

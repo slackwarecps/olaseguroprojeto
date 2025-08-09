@@ -1,4 +1,4 @@
-package br.com.fabioalvaro.olaseguroprojeto.controllers;
+package br.com.fabioalvaro.bananaserver.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
